@@ -1,18 +1,19 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('PGHOST'),
-        database: configService.get<string>('PGDATABASE'),
-        username: configService.get<string>('PGUSER'),
-        password: configService.get<string>('PGPASSWORD'),
-        port: configService.get<number>('PGPORT'),
+        host: configService.get<string>('POSTGRES_HOST'),
+        database: configService.get<string>('POSTGRES_DB'),
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        port: configService.get<number>('POSTGRES_PORT'),
         autoLoadEntities: true,
         synchronize: true,
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],

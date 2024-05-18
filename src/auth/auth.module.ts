@@ -6,6 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from './jwt.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Customer } from '../database/entities/customer.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -22,6 +24,10 @@ import { Customer } from '../database/entities/customer.entity';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtService],
+  providers: [
+    AuthService,
+    JwtService,
+    { provide: APP_GUARD, useClass: AuthGuard },
+  ],
 })
 export class AuthModule {}
