@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from '../database/models/customer.entity';
 import { Repository } from 'typeorm';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { Movie } from '../database/models/movie.entity';
 
 @Injectable()
 export class CustomerService {
@@ -11,6 +12,8 @@ export class CustomerService {
   constructor(
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
+    @InjectRepository(Movie)
+    private readonly movieRepository: Repository<Movie>,
   ) {}
 
   async findAll(): Promise<Customer[]> {
@@ -47,5 +50,27 @@ export class CustomerService {
     }
 
     return this.customerRepository.softRemove(customer);
+  }
+
+  async addFavorite(customerId: string, movieId: string): Promise<Customer> {
+    const customer = await this.customerRepository.findOneBy({
+      id: customerId,
+    });
+
+    if (!customer) {
+      this.logger.error('Customer not found');
+      throw new NotFoundException('Customer not found');
+    }
+
+    const movie = await this.movieRepository.findOneBy({ id: movieId });
+
+    if (!movie) {
+      this.logger.error('Movie not found');
+      throw new NotFoundException('Movie not found');
+    }
+
+    customer.favoriteMovies.push(movie);
+
+    return this.customerRepository.save(customer);
   }
 }
