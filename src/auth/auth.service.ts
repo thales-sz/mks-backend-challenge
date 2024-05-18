@@ -9,7 +9,7 @@ import {
 import { SignInDto } from './dto/sign-in.dto';
 import { JwtService } from './jwt.service';
 import { Repository } from 'typeorm';
-import { Customer } from '../database/entities/customer.entity';
+import { Customer } from '../database/models/customer.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignUpDto } from './dto/sign-up.dto';
 

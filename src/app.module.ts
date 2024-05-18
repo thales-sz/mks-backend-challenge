@@ -4,9 +4,9 @@ import { MovieModule } from './movie/movie.module';
 import { CustomerModule } from './customer/customer.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import * as Joi from 'joi';
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
+import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import * as Joi from 'joi';
 
 @Module({
   imports: [

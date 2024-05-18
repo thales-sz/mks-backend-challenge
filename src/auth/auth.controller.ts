@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { SignInDto } from './dto/sign-in.dto';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
-import { Customer } from '../database/entities/customer.entity';
+import { Customer } from '../database/models/customer.entity';
 import { Public } from './config/metadata';
 
 type SignInResponse = {
@@ -14,7 +14,7 @@ type SignUpResponse = Customer;
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('signin')

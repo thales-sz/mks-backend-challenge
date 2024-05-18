@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from './jwt.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Customer } from '../database/entities/customer.entity';
+import { Customer } from '../database/models/customer.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 
