@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -51,5 +52,19 @@ export class AuthService {
     });
 
     return this.customerRepository.save(newCustomer);
+  }
+
+  async validateToken(token: string): Promise<Customer> {
+    try {
+      return await this.jwtService.verify(token);
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new ForbiddenException('Token expired');
+      }
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid token');
+      }
+      throw new Error(error);
+    }
   }
 }
