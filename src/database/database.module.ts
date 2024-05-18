@@ -16,7 +16,6 @@ import { join } from 'node:path';
         autoLoadEntities: true,
         synchronize: true,
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-        ssl: true,
       }),
       inject: [ConfigService],
     }),
