@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { Customer } from '../database/models/customer.entity';
-
-import * as bcrypt from 'bcrypt';
+import { JwtService as NestJwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class JwtService {
   constructor(private readonly jwtService: NestJwtService) {}
-
-  public async decode(token: string): Promise<any> {
-    return this.jwtService.decode(token, null);
-  }
 
   public async generateToken(
     payload: Omit<Customer, 'password'>,
@@ -18,12 +13,15 @@ export class JwtService {
     return this.jwtService.signAsync({ ...payload });
   }
 
-  public isPasswordValid(password: string, customerPassword: string): boolean {
-    return bcrypt.compareSync(password, customerPassword);
+  public isPasswordValid(
+    password: string,
+    customerPassword: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, customerPassword);
   }
 
   public encodePassword(password: string): string {
-    const salt: string = bcrypt.genSaltSync(12);
+    const salt = bcrypt.genSaltSync(10);
 
     return bcrypt.hashSync(password, salt);
   }

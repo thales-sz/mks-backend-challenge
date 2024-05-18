@@ -14,7 +14,7 @@ type SignUpResponse = Customer;
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('signin')
@@ -26,8 +26,6 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto): Promise<SignUpResponse> {
-    const customer = await this.authService.signUp(signUpDto);
-
-    return customer;
+    return this.authService.signUp(signUpDto);
   }
 }

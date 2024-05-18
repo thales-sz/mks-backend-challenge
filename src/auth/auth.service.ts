@@ -31,7 +31,12 @@ export class AuthService {
       throw new NotFoundException('Customer not found for provided email');
     }
 
-    if (!this.jwtService.isPasswordValid(password, customer.password)) {
+    const isPasswordValid = await this.jwtService.isPasswordValid(
+      password,
+      customer.password,
+    );
+
+    if (!isPasswordValid) {
       this.logger.error('Invalid password');
       throw new UnauthorizedException('Invalid password');
     }
@@ -42,20 +47,13 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto): Promise<Customer> {
-    const customer = await this.customerRepository.findOneBy({
-      email: signUpDto.email,
-    });
+    await this.validateSignUpRequest(signUpDto);
 
-    if (customer) {
-      this.logger.error('This email is already in use');
-      throw new ConflictException('This email is already in use');
-    }
-
-    const hashPassword = this.jwtService.encodePassword(signUpDto.password);
+    const hashedPassword = this.jwtService.encodePassword(signUpDto.password);
 
     const newCustomer = new Customer({
       ...signUpDto,
-      password: hashPassword,
+      password: hashedPassword,
     });
 
     return this.customerRepository.save(newCustomer);
@@ -63,7 +61,7 @@ export class AuthService {
 
   async validateToken(token: string): Promise<Customer> {
     try {
-      return await this.jwtService.verify(token);
+      return this.jwtService.verify(token);
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         this.logger.error('Token expired');
@@ -76,5 +74,11 @@ export class AuthService {
       this.logger.error(error);
       throw new Error(error);
     }
+  }
+
+  private async validateSignUpRequest({ email }: Pick<SignUpDto, 'email'>) {
+    const user = await this.customerRepository.findOneBy({ email });
+
+    if (user) throw new ConflictException('This email already exists.');
   }
 }
