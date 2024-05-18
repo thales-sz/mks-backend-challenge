@@ -32,7 +32,6 @@ async function bootstrap() {
     .setTitle('MKS Backend API')
     .setDescription("API created for MKS' backend challenge")
     .setVersion('1.0')
-    .addTag('Movies')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

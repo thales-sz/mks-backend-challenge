@@ -37,7 +37,14 @@ export class MovieService {
   }
 
   async findOne(id: string) {
-    return this.movieRepository.findOne({ where: { id } });
+    const movie = await this.movieRepository.findOne({ where: { id } });
+
+    if (!movie) {
+      this.logger.error('Movie not found');
+      throw new NotFoundException('Movie not found');
+    }
+
+    return movie;
   }
 
   async update(id: string, updateMovieDto: UpdateMovieDto) {

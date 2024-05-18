@@ -61,7 +61,7 @@ export class AuthService {
 
   async validateToken(token: string): Promise<Customer> {
     try {
-      return this.jwtService.verify(token);
+      return await this.jwtService.verify(token);
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         this.logger.error('Token expired');
