@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from '../database/entities/customer.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,8 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomerService {
+  protected logger: Logger = new Logger(CustomerService.name);
+
   constructor(
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
@@ -26,6 +28,7 @@ export class CustomerService {
     const customer = await this.customerRepository.findOneBy({ id });
 
     if (!customer) {
+      this.logger.error('Customer not found');
       throw new NotFoundException('Customer not found');
     }
 
@@ -39,6 +42,7 @@ export class CustomerService {
     const customer = await this.customerRepository.findOneBy({ id });
 
     if (!customer) {
+      this.logger.error('Customer not found');
       throw new NotFoundException('Customer not found');
     }
 

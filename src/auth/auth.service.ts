@@ -1,6 +1,8 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -13,6 +15,8 @@ import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
+  protected logger: Logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(Customer)
@@ -23,10 +27,12 @@ export class AuthService {
     const customer = await this.customerRepository.findOneBy({ email });
 
     if (!customer) {
+      this.logger.error(`Customer not found for provided email: ${email}`);
       throw new NotFoundException('Customer not found for provided email');
     }
 
     if (!this.jwtService.isPasswordValid(password, customer.password)) {
+      this.logger.error('Invalid password');
       throw new UnauthorizedException('Invalid password');
     }
 
@@ -41,7 +47,8 @@ export class AuthService {
     });
 
     if (customer) {
-      throw new UnauthorizedException('This email is already in use');
+      this.logger.error('This email is already in use');
+      throw new ConflictException('This email is already in use');
     }
 
     const hashPassword = this.jwtService.encodePassword(signUpDto.password);
@@ -59,11 +66,14 @@ export class AuthService {
       return await this.jwtService.verify(token);
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
+        this.logger.error('Token expired');
         throw new ForbiddenException('Token expired');
       }
       if (error.name === 'JsonWebTokenError') {
+        this.logger.error('Invalid token');
         throw new UnauthorizedException('Invalid token');
       }
+      this.logger.error(error);
       throw new Error(error);
     }
   }
