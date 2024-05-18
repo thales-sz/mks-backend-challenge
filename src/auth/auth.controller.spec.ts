@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { makeMockCustomer } from '../../test/customer.factory';
+import { makeMockCustomer } from '../../test/factory/customer.factory';
 
 describe('AuthController', () => {
   let controller: AuthController;

@@ -1,4 +1,4 @@
-import { Customer } from '../src/database/models/customer.entity';
+import { Customer } from '../../src/database/models/customer.entity';
 
 export function makeMockCustomer(): Customer {
   return new Customer({
