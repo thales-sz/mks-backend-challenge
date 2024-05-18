@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { SignInDto } from './dto/sign-in.dto';
+import { JwtService } from './jwt.service';
+import { Repository } from 'typeorm';
+import { Customer } from '../database/entities/customer.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(Customer)
+    private readonly customerRepository: Repository<Customer>,
+  ) {}
+
+  async signIn({ email, password }: SignInDto): Promise<string> {
+    const customer = await this.customerRepository.findOneBy({ email });
+
+    if (!customer) {
+      throw new NotFoundException('Customer not found for provided email');
+    }
+
+    if (!this.jwtService.isPasswordValid(password, customer.password)) {
+      throw new UnauthorizedException('Invalid password');
+    }
+
+    delete customer.password;
+
+    return this.jwtService.generateToken(customer);
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async signUp(signUpDto: SignUpDto): Promise<Customer> {
+    const customer = await this.customerRepository.findOneBy({
+      email: signUpDto.email,
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if (customer) {
+      throw new UnauthorizedException('This email is already in use');
+    }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    const hashPassword = this.jwtService.encodePassword(signUpDto.password);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    const newCustomer = new Customer({
+      ...signUpDto,
+      password: hashPassword,
+    });
+
+    return this.customerRepository.save(newCustomer);
   }
 }
