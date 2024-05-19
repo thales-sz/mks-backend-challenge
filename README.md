@@ -23,6 +23,11 @@ O deploy da aplicação foi feito em uma VM na GCP (Google Cloud Platform) e o e
 
 Para executar a aplicação localmente, siga os passos:
 
+0. Antes de tudo copie os valores da .env.example para um arquivo .env:
+    ```bash
+    cp .env.example .env
+    ```
+
 1. Clone o repositório: 
     ```bash
     git clone git@github.com:thales-sz/mks-backend-challenge.git
