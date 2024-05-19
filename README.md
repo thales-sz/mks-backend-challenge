@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# MKS Backend Challenge
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este repositório contém a solução para o teste de desenvolvedor backend para a MKS. O foco deste projeto é avaliar o conhecimento de back-end com foco em habilidades organizacionais e arquiteturais. A tarefa é criar uma API Nodejs para um aplicativo de catálogo de filmes.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Desafio
 
-## Description
+O desafio consiste em criar uma API RESTful JSON, que consistem em um CRUD de filmes e clientes. Além disso, é necessário implementar um sistema de cache para visualização dos mesmos.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias
 
-## Installation
+- **Linguagem de Programação**: TypeScript (Node.js 20.x) com o framework NestJS
+- **Banco de Dados**: Postgres (Persistência de dados) + Redis (Cache)
+- **Containerização**: Docker + Docker compose
+- **Bibliotecas**: TypeORM, Jest
+- **Ferramentas**: Nginx (Load Balancer)
+- **Documentação**: Swagger
 
-```bash
-$ npm install
-```
+## Deploy
 
-## Running the app
+O deploy da aplicação foi feito em uma VM na GCP (Google Cloud Platform) e o endpoint é: `http://
 
-```bash
-# development
-$ npm run start
+## Rodando localmente
 
-# watch mode
-$ npm run start:dev
+Para executar a aplicação localmente, siga os passos:
 
-# production mode
-$ npm run start:prod
-```
+1. Clone o repositório: 
+    ```bash
+    git clone git@github.com:thales-sz/mks-backend-challenge.git
+    ```
+2. Navegue até o diretório:
+    ```bash
+    cd mks-backend-challenge
+    ```
+3. Certifique-se de usar a versão mais recente:
+    ```bash
+    git pull origin main
+    ```
+4. Execute:
+    ```bash
+   docker compose up --build
+    ```
 
-## Test
+Para executar os testes, no diretório raiz execute:
+   ```bash
+   npm run test
+  ```
 
-```bash
-# unit tests
-$ npm run test
+Ou para coverage:
+  ```bash
+    npm run test:cov
+  ```
 
-# e2e tests
-$ npm run test:e2e
+**Não se esqueça de atualizar o arquivo .env com as credenciais corretas**
 
-# test coverage
-$ npm run test:cov
-```
 
-## Support
+Ao executar esses comandos, o programa trará 5 containers docker, 2 instâncias da aplicação rodando na porta 3030, um balanceador de carga nginx na porta 9999, os bancos de dados postgres e redis.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Todas as solicitações à API devem ser feitas diretamente ao balanceador de carga Nginx na porta **9999**
 
-## Stay in touch
+## Documentação
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+O app possui uma documentação feita com o Swagger: 
+
+- Local: `http://localhost:9999/api/v1/docs`
+- Deploy: `http://
+
+### Bonus Questions
+
+## Notas
+
+- Sinta-se à vontade para qualquer dúvida em: thales.souz@outlook.com
+- Obrigado pela oportunidade!
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
