@@ -5,6 +5,7 @@ import { makeMockCustomer } from '../../test/factory/customer.factory';
 
 describe('CustomerController', () => {
   let controller: CustomerController;
+  let service: CustomerService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,11 +18,13 @@ describe('CustomerController', () => {
             findOne: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
+            addFavorite: jest.fn(),
           },
         },
       ],
     }).compile();
 
+    service = module.get<CustomerService>(CustomerService);
     controller = module.get<CustomerController>(CustomerController);
   });
 
@@ -33,7 +36,7 @@ describe('CustomerController', () => {
     const mockCustomer = makeMockCustomer();
 
     jest
-      .spyOn(controller, 'findAll')
+      .spyOn(service, 'findAll')
       .mockResolvedValue([mockCustomer, mockCustomer]);
 
     const response = await controller.findAll();
@@ -44,7 +47,7 @@ describe('CustomerController', () => {
   it('Should return a customer', async () => {
     const mockCustomer = makeMockCustomer();
 
-    jest.spyOn(controller, 'findOne').mockResolvedValue(mockCustomer);
+    jest.spyOn(service, 'findOne').mockResolvedValue(mockCustomer);
 
     const response = await controller.findOne('id');
 
@@ -54,7 +57,7 @@ describe('CustomerController', () => {
   it('Should return a customer when updated', async () => {
     const mockCustomer = makeMockCustomer();
 
-    jest.spyOn(controller, 'update').mockResolvedValue(mockCustomer);
+    jest.spyOn(service, 'update').mockResolvedValue(mockCustomer);
 
     const response = await controller.update('id', mockCustomer);
 
@@ -64,9 +67,19 @@ describe('CustomerController', () => {
   it('Should return a customer when removed', async () => {
     const mockCustomer = makeMockCustomer();
 
-    jest.spyOn(controller, 'remove').mockResolvedValue(mockCustomer);
+    jest.spyOn(service, 'remove').mockResolvedValue(mockCustomer);
 
     const response = await controller.remove('id');
+
+    expect(response).toEqual(mockCustomer);
+  });
+
+  it('Should favorite a movie', async () => {
+    const mockCustomer = makeMockCustomer();
+
+    jest.spyOn(service, 'addFavorite').mockResolvedValue(mockCustomer);
+
+    const response = await controller.addFavorite('id', 'idMovie');
 
     expect(response).toEqual(mockCustomer);
   });

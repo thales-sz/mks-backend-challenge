@@ -5,6 +5,7 @@ import { makeMockCustomer } from '../../test/factory/customer.factory';
 
 describe('AuthController', () => {
   let controller: AuthController;
+  let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +21,7 @@ describe('AuthController', () => {
       ],
     }).compile();
 
+    service = module.get<AuthService>(AuthService);
     controller = module.get<AuthController>(AuthController);
   });
 
@@ -34,9 +36,7 @@ describe('AuthController', () => {
         password: 'password123',
       };
 
-      jest
-        .spyOn(controller, 'signIn')
-        .mockResolvedValue({ token: 'token-string' });
+      jest.spyOn(service, 'signIn').mockResolvedValue('token-string');
 
       const response = await controller.signIn(signInParams);
 
@@ -54,7 +54,7 @@ describe('AuthController', () => {
         password: 'password123',
       };
 
-      jest.spyOn(controller, 'signUp').mockResolvedValue(mockCustomer);
+      jest.spyOn(service, 'signUp').mockResolvedValue(mockCustomer);
 
       const response = await controller.signUp(signUpParams);
 

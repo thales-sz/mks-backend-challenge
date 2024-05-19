@@ -5,6 +5,7 @@ import { makeMockMovie } from '../../test/factory/movie.factory';
 
 describe('MovieController', () => {
   let controller: MovieController;
+  let service: MovieService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +24,7 @@ describe('MovieController', () => {
       ],
     }).compile();
 
+    service = module.get<MovieService>(MovieService);
     controller = module.get<MovieController>(MovieController);
   });
 
@@ -39,7 +41,7 @@ describe('MovieController', () => {
         duration: 120,
       };
 
-      jest.spyOn(controller, 'create').mockResolvedValue(mockMovie);
+      jest.spyOn(service, 'create').mockResolvedValue(mockMovie);
 
       const response = await controller.create(createParams);
 
@@ -51,7 +53,7 @@ describe('MovieController', () => {
     it('Should return a list of movies', async () => {
       const mockMovie = makeMockMovie();
 
-      jest.spyOn(controller, 'findAll').mockResolvedValue([mockMovie]);
+      jest.spyOn(service, 'findAll').mockResolvedValue([mockMovie]);
 
       const response = await controller.findAll();
 
@@ -64,7 +66,7 @@ describe('MovieController', () => {
       const mockMovie = makeMockMovie();
       const movieId = '1';
 
-      jest.spyOn(controller, 'findOne').mockResolvedValue(mockMovie);
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockMovie);
 
       const response = await controller.findOne(movieId);
 
@@ -82,7 +84,7 @@ describe('MovieController', () => {
         duration: 120,
       };
 
-      jest.spyOn(controller, 'update').mockResolvedValue(mockMovie);
+      jest.spyOn(service, 'update').mockResolvedValue(mockMovie);
 
       const response = await controller.update(movieId, updateParams);
 
@@ -95,7 +97,7 @@ describe('MovieController', () => {
       const mockMovie = makeMockMovie();
       const movieId = '1';
 
-      jest.spyOn(controller, 'remove').mockResolvedValue(mockMovie);
+      jest.spyOn(service, 'remove').mockResolvedValue(mockMovie);
 
       const response = await controller.remove(movieId);
 

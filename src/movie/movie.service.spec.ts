@@ -4,7 +4,6 @@ import { makeMockMovie } from '../../test/factory/movie.factory';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Movie } from '../database/models/movie.entity';
 import { repositoryMockFactory } from '../../test/factory/repository.factory';
-import { Customer } from '../database/models/customer.entity';
 import { Repository } from 'typeorm';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
@@ -114,5 +113,28 @@ describe('MovieService', () => {
     );
   });
 
-  it()
+  it('Should throw NotFoundExeception when trying to find a single movie with the wrogn id', async () => {
+    jest.spyOn(movieRepository, 'findOne').mockResolvedValue(null);
+
+    await expect(service.findOne('wrong-id')).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
+  it('Should soft delete a movie', async () => {
+    const mockMovie = makeMockMovie();
+
+    jest.spyOn(movieRepository, 'findOneBy').mockResolvedValue(mockMovie);
+    jest.spyOn(movieRepository, 'softRemove').mockResolvedValue(mockMovie);
+
+    const response = await service.remove('123');
+
+    expect(response).toBe(mockMovie);
+  });
+
+  it('Should throw NotFoundExeception when trying to remove a movie that does not exist', async () => {
+    jest.spyOn(movieRepository, 'findOneBy').mockResolvedValue(null);
+
+    await expect(service.remove('wrong-id')).rejects.toThrow(NotFoundException);
+  });
 });

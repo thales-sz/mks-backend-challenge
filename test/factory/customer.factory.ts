@@ -6,6 +6,7 @@ export function makeMockCustomer(): Customer {
     username: 'Fake Customer Name',
     email: 'fake@email.com',
     password: 'fakepassword',
+    favoriteMovies: [],
     updatedAt: new Date(),
     createdAt: new Date(),
     deletedAt: null,

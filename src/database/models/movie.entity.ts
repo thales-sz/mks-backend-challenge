@@ -16,14 +16,4 @@ export class Movie extends AbstractEntity<Movie> {
   @ApiProperty()
   @Column({ nullable: false })
   duration: number;
-
-  get formatedDuration(): string {
-    const hours = Math.floor(this.duration / 3600);
-
-    const remainingSeconds = this.duration % 3600;
-
-    const minutes = Math.floor(remainingSeconds / 60);
-
-    return `${hours}hr e ${minutes}min`;
-  }
 }
